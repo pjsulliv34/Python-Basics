@@ -1,0 +1,69 @@
+Name: Peter Sullivan (psulli29)
+
+Module Info: 
+
+Module 12, Assignment 1. elimination.py
+DueDate - 11/26/2023
+
+Approach:
+
+elimination.py
+
+In this program I first imported the networkx pacakge as nx and the math package. Which I will need both later on in the program.
+
+Next, I created the class called Eliminate. With in this class, I first used the init constructor to create the instance of the file name.
+
+Next I created a method called read_format that only takes in the keyword self. With in this method, I then use the with clause and open function to read in the filename in reader mode and name the variable as reader. With the file open, I then create the variable named number of teams using the readline method and int clause to change the type to integer from string.
+
+I then initialized two empty lists and an empty dictionary. Next, I looped through the range of the number of teams. I first appended the team data list with the team name, wins, loss and number of games left. I then appended the dictionary with the key as the name of the team and the index as the value. Next, I initialize an empty list called temp table.
+
+I then loop through the range of the number of teams again. For each index, I append the temp table with the index plus 4. This allows me to grab the final info in the text file after the wins, loss, and games left columns. Once I've looped through all the columns in the current row, I then append the remaining games list with the team name and the filled out temp table. I then clear the temp table for the next iteration in the for loop which will read the next line in the txt file. I then return the two lists and the dictionary.
+
+The next method I created is the graph method. This takes in the self key word and three lists, game_verts, team_verts, and sink_verts.
+
+With in this method, I first initialize the graph using the networkx package and the DIGraph method. This is a directional graph, which is why I used the DIgraph method. Next, I used the add_edges_from method, and input the three lists that have been created in a manner that can be inputted into the add_edges_from method. A list of tuples that contain the two nodes and the weight [(node, node, weight = x)]. Finally, this method returns the graph.
+
+The next method I created is the max_flow method which takes in the self keyword, a graph object that has been created using the networkx package, the source node, sink node, and the weight. I then create a variable called val and a dictionary called dict_ using the networkx method called maximum flow. This method takes in the graph, source, sink and weight to return the max flow value and a dictionary of the flow edges. I then returned the value and the dictionary.
+
+Next, I created the method called status. This takes in the self keyword, a sum and a value both integers. With in this method, I then use an if clause to check if the summ is less then the value, if so, return true, otherwise return false
+
+Next I created a main function, that will be used to run when this script is run, not when imported. With in the main function, I first created a list called files, which contains all of the text files the assignment wants us to run. 
+
+Next I created a for loop that will loop through each of the files. With in the for loop, I then create an eliminated object using the Eliminate class and inputting the txt file name. Then I used the read_format method, to sort and process the txt file to return two lists, team data which contains the team name, wins, loss and games left, and remaining games which contain the team names, and future games planned. The method also returns a dictionary called the team_id which is used to store the index of each team as it was written in the txt file.
+
+I then initialized two empty lists, eliminated trivially, and eliminated teams. I then created a loop where I would loop through the teams and the wins, loss and games left which is in the list team data. In this loop, I will go through and do the first scenario of determining if a team is trivially eliminated. I first grab the max wins for the current team using the int method and adding the wins with the games left for that team. Next, I need to loop through the other teams to check if their current wins are higher then the current teams max possible wins. To do this, I loop through the team data again, but I put an if clause to verify that the team I’m looking at is not the same as the initial team from the first for loop. If the team is not the same as the initial team, then I create a variable called trivial max using the int function and the wins from the team data list. I then use an if clause to check if the trivialmax is greater then the max possible wins, if so I append the team name of the current team were checking and the team with the trivially higher max to the eliminated trivially list, and I also append the team eliminated to the eliminated teams list.
+
+After that loop concludes, I then create another empty list called not eliminated trivially. I then use a for loop to loop through the team data, with in that for loop I check to see if the team name is not in the eliminated teams list, if so, I append the team name to the not eliminated trivially list.
+
+Next, I create an empty list called eliminate status. Now that we have identified all of the teams that have been eliminated trivially, we need to see if the teams that are in the not eliminated trivially list have been eliminated or not. To figure this out we will need to create a graph. Before I can create a graph, I will need to create three lists of tuples that are in the format [(node, node, weight = x)], game vertices, team vertices and sink. Once I have these three lists, I can use the add from edges method to construct our nodes/edges for each of the graphs.
+
+To get these lists, I first created a for loop to loop through the not eliminated trivially list. I then create an empty list called game vertices. I then create a loop through the range of the len of the remaining games list. The remaining games list is constructed that the first slice is the team name and the second slice is the list of planned games. With in this for loop, I first check to see if the name of team is not equal to the team in the not eliminated list. We do this since when constructing the graph, we exclude the team we are looking at for the vertices. I then use a for loop to loop through each of the games in the second slice of the remaining games list. I then use a if clause to verify that the item in the list does not correspond to itself using the team_id dictionary to verify that the current index does not equal the index from the team_id dictionary. This is just so we don't add in the info when usa plays usa. This is zero anyway, but this helps avoid that being added to the games vertices. Finally, I append the games vertices with the source, and the node name, and the capacity which I named games. The games are the associated amount in the remaining games list for the current item and the team they’re playing.
+
+Next, I need to create the team vertices. To do this, I first create an empty list called team vertices. I then created a for loop to loop through each of the vertices in the game vertices list. I then used the split method to split the second element in the games vertex item (team1 - team2). I then created a for loop to loop through this split and filter out when the item equals '-'. I then append the team_vertices list with the name of the current node, the split and the weight. (team1 - team2, team, weight). As noted in the homework, I put the weight of each edge in this list to infinity using the math package.
+
+Finally, we need to create the sink list. To do this, I first loop through the index’s of the team data using the range and len functions. I then verify that the team data name is not the current team from the not eliminated list we are looking at. If so, then I append the sink list with the tuple that contains the team name, sink, and the weight. The weight for this one is the wins + remaining games for the current team in the not eliminated trivially list - the wins from the node that we are connected to the sink.
+
+Now that we have our three lists of tuples, I can now create the graph. To do this I use the graph method from our eliminate object and input the games_vertices, team_vertices, and the sink lists.
+
+I then use the max_flow method from our eliminate object inputting the graph we just created, the source node name, sink node name, and the weight we are using. This returns the max flow value and the flow dictionary. 
+
+Next I created an object called summ and set it to 0. I then create a loop that loops through all of the items in the game_vertices list. For each item in the list, I then add to summ the value of the weight. 
+
+We now have enough information to check if the team from the not eliminated trivially list will be eliminated. To do this, I use an if clause and call the status method inputting the summ and the max flow value. If this returns true, then I append the eliminate status list with the team name and not eliminated. If this is false, I append the eliminate status list with the team name and the eliminated.
+
+We  now have two lists, eliminate status, which has the teams that were not eliminated trivially and the predictions of eliminated or not eliminated and the eliminated trivially list, which has all teams that were eliminated trivially. I need to combine those into one list so that we can output the print statement as the homework is requesting.
+
+To do this, I first create an empty list called final output. I then use a for loop to loop through all of the items in the team data list. I then check if the team name is in the eliminated teams list. If so, I then loop through the eliminated trivially list. I then use an if clause to check if the team name matches the eliminated trivially list, if so I append the item from the eliminated trivially list. This is important since it lists the team who was eliminated and by whom.
+
+If the team is not in the eliminated trivially list. I then loop through the list of eliminate status. If the team name matches the name in the eliminated status, I then return the item from the eliminated status list. 
+
+Finally, we can now loop through the final output list. This list has all the information in the correct order. With in this loop, I use an if clause to check if the team name is in the eliminated teams list, if so, I then use the print function with an f string to print out the expected message using both slices, and if not, print out a different message using both slices of the item.
+
+Finally, I use an if function to check if the dunder name is equal to __main__. If that is the case then we run the main function. This clause will only be true if we run it via script.
+
+Known Bugs:
+N/A
+
+Citations:
+
+https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.flow.maximum_flow.html
